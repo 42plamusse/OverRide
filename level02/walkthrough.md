@@ -9,7 +9,7 @@ Format String Vulnerability
 The vulnerability occurs in the printf function, where the username, controlled by the user, is printed without proper formatting.
 The goal is to leak the contents of the .pass file stored in memory.
 Using format specifiers like `%p`, we calculate the number of specifiers needed to reach the desired memory location.
-By inputting `%22$p|%23$p|%24$p|%25$p|%26$p`, we can retrieve the memory content and later convert it to ASCII to obtain the .pass file.
+By inputting `%22$p %23$p %24$p %25$p %26$p`, we can retrieve the memory content and later convert it to ASCII to obtain the .pass file.
 
 ## Payload:
 

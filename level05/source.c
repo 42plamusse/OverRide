@@ -4,9 +4,9 @@
 
 int main(void)
 {
-    char buffer[0];
+    char buffer[0x64];
 
-    fgets(buffer, 0x68, stdin);
+    fgets(buffer, 0x64, stdin);
     for (int i = 0; i < strlen(buffer); i++)
         buffer[i] = tolower(buffer[i]);
 

