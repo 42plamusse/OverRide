@@ -1,22 +1,41 @@
+# level03
+
+## Vulnerability type:
+
+Buffer Overflow
+
+## Walkthrough:
+
+The program level03 takes an integer input from the user.
+It calculates the difference between the input and 0x1337d00d and stores it in a variable.
+If the difference is less than 0x15 (21 in decimal), the program calls the decrypt function with the calculated difference as an argument.
+The decrypt function performs an XOR operation on each character of the string `` Q}|u\`sfg~sf{}|a3 `` using the calculated difference as the key.
+If the resulting string matches "Congratulations!", the program executes `/bin/sh`, providing a shell to the user.
+
+> key_value = char1 ^ char2
+> key_value = 'C' ^ 'Q'
+> key_value = 67 ^ 81
+> key_value = 18
+
+So our password is:
+
+> pwd = 0x1337d00d - 0x12
+> pwd = 0x1337CFFB
+> pwd = 322424827
+
+## Payload:
+
+```bash
+level03@OverRide:~$ ./level03
+***********************************
+*		level03		**
+***********************************
+Password:322424827
+$ whoami
+level04
 ```
-set disassembly i
-define all
-   x/9i $eip
-   echo \n
-   i r
-   echo \n
-   x/100wx $esp
-end
 
-define nall
-   set $instr=$eip
-   ni
-   x/i $instr
-   all
-end
-
-
-```
+## ASM
 
 ## main()
 
@@ -290,50 +309,4 @@ end
    0x08048744 <+228>:	pop    edi
    0x08048745 <+229>:	pop    ebp
    0x08048746 <+230>:	ret
-```
-
-In this program, the password input by the user is an integer. The difference between the value `0x1337d00d` and the password value will be stored and used as a key to decrypt a string.
-We know that the encrypted string is "Q}|u`sfg~sf{}|a3" and that the decrypted one is "Congratulation!".
-
-```
-void decrypt(int n)
-{
-    char str[] = "Q}|u`sfg~sf{}|a3"; // 0xffffd68b
-    char c;
-    int len;
-    int i;
-
-    len = strlen(str);
-    i = 0;
-    while (i < len)
-        str[i] = str[i++] ^ n;
-
-    if (!(strncmp(str, "Congratulations!", 0x11)))
-        system("/bin/sh");
-    else
-        puts("Invalid password!\n");
-}
-```
-
-We have to find out the key value needed for the decryption, we can use the first char of each str.
-
-> key_value = char1 ^ char2
-> key_value = 'C' ^ 'Q'
-> key_value = 67 ^ 81
-> key_value = 18
-
-So our password is:
-
-> pwd = 0x1337d00d - 0x12
-> pwd = 0x1337CFFB
-> pwd = 322424827
-
-```
-level03@OverRide:~$ ./level03
-***********************************
-*		level03		**
-***********************************
-Password:322424827
-$ whoami
-level04
 ```

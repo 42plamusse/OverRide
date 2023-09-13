@@ -12,9 +12,9 @@ int main(void)
     size_t pwd_len = 0;
     FILE *file = 0;
 
-    memset(username_buffer, 0, 12);
-    memset(stored_password, 0, 5);
-    memset(password_buffer, 0, 12);
+    memset(username_buffer, 0, sizeof(username_buffer));
+    memset(stored_password, 0, sizeof(stored_password));
+    memset(password_buffer, 0, sizeof(password_buffer));
 
     file = fopen("/home/users/level03/.pass", "r");
     if (!file)

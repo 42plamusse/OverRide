@@ -39,7 +39,7 @@ int main()
     printf("Enter Password: ");
     fgets(password, 0x64, stdin);
 
-    isValid = verify_user_name(username);
+    isValid = verify_user_pass(password);
 
     puts("nope, incorrect password...\n");
 
